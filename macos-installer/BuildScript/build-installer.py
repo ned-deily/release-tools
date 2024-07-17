@@ -1034,7 +1034,6 @@ def buildPythonFramework(python_framework_name, buildDir, configure_options):
 
     frmDir = os.path.join(ROOTDIR, 'Library', 'Frameworks', f'{python_framework_name}.framework')
     frmDirVersioned = os.path.join(frmDir, 'Versions', getVersion())
-    path_to_lib = os.path.join(frmDirVersioned, 'lib', f'python{getVersion()}')
 
     if main_framework:
         # create directory for OpenSSL certificates
@@ -1084,6 +1083,7 @@ def buildPythonFramework(python_framework_name, buildDir, configure_options):
     # the end-users system. Also remove the directories from _sysconfigdata.py
     # (added in 3.3) if it exists.
 
+    path_to_lib = os.path.join(frmDirVersioned, 'lib', f'python{LDVERSION}')
     include_path = f'-I{WORKDIR}/libraries/usr/local/include'
     lib_path = f'-L{WORKDIR}/libraries/usr/local/lib'
 
