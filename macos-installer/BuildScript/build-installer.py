@@ -205,22 +205,20 @@ def library_recipes():
 
     result.extend([
           dict(
-              name="NCurses 6.5",
-              url="https://ftp.gnu.org/gnu/ncurses/ncurses-6.5.tar.gz",
-              checksum='136d91bc269a9a5785e5f9e980bc76ab57428f604ce3e5a5a90cebc767971cc6',
+              name="NCurses 5.9",
+              url="http://ftp.gnu.org/pub/gnu/ncurses/ncurses-5.9.tar.gz",
+              checksum='9046298fb440324c9d4135ecea7879ffed8546dd1b58e59430ea07a4633f563b',
               configure_pre=[
+                  "--enable-pc-files",
                   "--enable-widec",
                   "--without-cxx",
                   "--without-cxx-binding",
                   "--without-ada",
                   "--without-curses-h",
+                  "--enable-shared",
                   "--with-shared",
                   "--without-debug",
                   "--without-normal",
-                  "--without-progs",
-                  "--without-termlib",
-                  "--without-ticlib",
-                  "--disable-db-install",
                   "--without-tests",
                   "--without-manpages",
                   "--datadir=/usr/share",
@@ -228,10 +226,18 @@ def library_recipes():
                   "--sharedstatedir=/usr/com",
                   "--with-terminfo-dirs=/usr/share/terminfo",
                   "--with-default-terminfo-dir=/usr/share/terminfo",
-                  f"--libdir=/Library/Frameworks/Python.framework/Versions/{getVersion()}/lib",
+                  "--libdir=/Library/Frameworks/Python.framework/Versions/%s/lib"%(getVersion(),),
               ],
+              patchscripts=[
+                  ("ftp://ftp.invisible-island.net/ncurses//5.9/ncurses-5.9-20120616-patch.sh.bz2",
+                   "f54bf02a349f96a7c4f0d00922f3a0d4"),
+                   ],
               useLDFlags=False,
-              install=f'make && make install DESTDIR={shellQuote(os.path.join(WORKDIR,"libraries"))} && cd {shellQuote(os.path.join(WORKDIR,"libraries"))}/usr/local/lib && ln -fs ../../../Library/Frameworks/Python.framework/Versions/{getVersion()}/lib/lib* .',
+              install='make && make install DESTDIR=%s && cd %s/usr/local/lib && ln -fs ../../../Library/Frameworks/Python.framework/Versions/%s/lib/lib* .'%(
+                  shellQuote(os.path.join(WORKDIR, 'libraries')),
+                  shellQuote(os.path.join(WORKDIR, 'libraries')),
+                  getVersion(),
+                  ),
           ),
 
           dict(
