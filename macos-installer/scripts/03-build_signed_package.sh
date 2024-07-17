@@ -166,10 +166,10 @@ codesign --sign "${BP_CERTIFICATE_DEVELOPER_ID_APPLICATION}" --keychain ${BP_KEY
 lib/python${PY_VER}/lib-dynload/*.so \
 lib/python${PY_VER}/config-${PY_VER}-darwin/python.o \
 lib/libcrypto.3.dylib \
-lib/libformw.5.dylib \
-lib/libmenuw.5.dylib \
-lib/libncursesw.5.dylib \
-lib/libpanelw.5.dylib \
+lib/libformw.6.dylib \
+lib/libmenuw.6.dylib \
+lib/libncursesw.6.dylib \
+lib/libpanelw.6.dylib \
 lib/libssl.3.dylib \
 Frameworks/Tcl.framework/Tcl \
 Frameworks/Tk.framework/Tk \
@@ -192,13 +192,13 @@ pushd "${MNT}/_root/Library/Frameworks/PythonT.framework/Versions/${PY_VER}"
 
 # ***TODO: resolve issue with notarization failure of zipimport_data files
 
-rm -rf lib/python${PY_VER}/test/zipimport_data
+rm -rf lib/python${PY_VER}t/test/zipimport_data
 
 codesign --sign "${BP_CERTIFICATE_DEVELOPER_ID_APPLICATION}" --keychain ${BP_KEYCHAIN} \
     --entitlements ${CWD}/entitlements.plist \
     --continue --force --deep --timestamp --options=runtime --verbose=9 \
-lib/python${PY_VER}/lib-dynload/*.so \
-lib/python${PY_VER}/config-${PY_VER}t-darwin/python.o \
+lib/python${PY_VER}t/lib-dynload/*.so \
+lib/python${PY_VER}t/config-${PY_VER}t-darwin/python.o \
 bin/python${PY_VER} \
 bin/python${PY_VER}t \
 Resources/Python.app \
