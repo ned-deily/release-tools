@@ -990,11 +990,24 @@ def buildPythonFramework(python_framework_name, buildDir, configure_options):
                f"--without-ensurepip "
                f"--with-system-libmpdec "
                f"--with-openssl='{workDirUsrLocal}' "
+               f"LIBLZMA_CFLAGS='-I{workDirUsrLocalInclude}' "
+               f"LIBLZMA_LIBS='-L{workDirUsrLocalLib} -llzma' "
+               f"LIBMPDEC_CFLAGS='-I{workDirUsrLocalInclude}' "
+               f"LIBMPDEC_LIBS='-L{workDirUsrLocalLib} -lmpdec -lm' "
+               f"LIBSQLITE3_CFLAGS='-I{workDirUsrLocalInclude}' "
+               f"LIBSQLITE3_LIBS='-L{workDirUsrLocalLib} -lsqlite3' "
                f"TCLTK_CFLAGS='-I{workDirUsrLocalInclude}' "
                f"TCLTK_LIBS='-L{workDirUsrLocalLib} -ltcl -ltk' "
-               f"CFLAGS='-g -I{workDirUsrLocalInclude}' "
-               f"LDFLAGS='-g -L{workDirUsrLocalLib}' "
                f"2>&1")
+               # TODO: determine why our private ncurses builds cannot find
+               #       terminfo data and why _curses and _curses_panel had been
+               #       linking with the system ncurses (since 3.12.0 and
+               #       until gh-113565 in 3.13.0b4). For now, continue to
+               #       use the system ncurses.
+               # f"CURSES_CFLAGS='-I{workDirUsrLocalInclude}/ncursesw' "
+               # f"CURSES_LIBS='-L{workDirUsrLocalLib} -lncursesw' "
+               # f"PANEL_CFLAGS='-I{workDirUsrLocalInclude}/ncursesw' "
+               # f"PANEL_LIBS='-L{workDirUsrLocalLib} -lpanelw' "
 
     runshared_for_make = f" RUNSHARED='{grepValue("Makefile", "RUNSHARED")} DYLD_LIBRARY_PATH={workDirUsrLocalLib}'"
 
