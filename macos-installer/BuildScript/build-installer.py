@@ -1047,8 +1047,8 @@ def buildPythonDocs():
     htmlDir = os.path.join("build", "html")
     if not os.path.exists(htmlDir):
         # Create virtual environment for docs builds with blurb and sphinx
-        runCommand("make venv")
-        runCommand("make html PYTHON=venv/bin/python")
+        runCommand(f"make venv PYTHON={sys.executable}")
+        runCommand("make html")
     os.rename(htmlDir, docdir)
     os.chdir(curDir)
 
