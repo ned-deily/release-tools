@@ -1224,95 +1224,6 @@ def buildPythonFramework(python_framework_name, buildDir, configure_options):
             os.chmod(p, stat.S_IMODE(st.st_mode) | stat.S_IWGRP, follow_symlinks=False)
             os.chown(p, -1, gid, follow_symlinks=False)
 
-    LDVERSION = None
-    VERSION = None
-    ABIFLAGS = None
-
-    fp = open(os.path.join(buildDir, "Makefile"), "r")
-    for ln in fp:
-        if ln.startswith("VERSION="):
-            VERSION = ln.split()[1]
-        if ln.startswith("ABIFLAGS="):
-            ABIFLAGS = ln.split()
-            ABIFLAGS = ABIFLAGS[1] if len(ABIFLAGS) > 1 else ""
-        if ln.startswith("LDVERSION="):
-            LDVERSION = ln.split()[1]
-    fp.close()
-
-    LDVERSION = LDVERSION.replace("$(VERSION)", VERSION)
-    LDVERSION = LDVERSION.replace("$(ABIFLAGS)", ABIFLAGS)
-    config_suffix = "-" + LDVERSION
-    if getVersionMajorMinor() >= (3, 6):
-        config_suffix = config_suffix + "-darwin"
-
-    # We added some directories to the search path during the configure
-    # phase. Remove those because those directories won't be there on
-    # the end-users system. Also remove the directories from _sysconfigdata.py
-    # (added in 3.3) if it exists.
-
-    path_to_lib = os.path.join(frmDirVersioned, "lib", f"python{LDVERSION}")
-    include_path = f"-I{WORKDIR}/libraries/usr/local/include"
-    lib_path = f"-L{WORKDIR}/libraries/usr/local/lib"
-
-    # fix Makefile
-    path = os.path.join(path_to_lib, "config" + config_suffix, "Makefile")
-    fp = open(path, "r")
-    data = fp.read()
-    fp.close()
-
-    for p in (include_path, lib_path):
-        data = data.replace(" " + p, "")
-        data = data.replace(p + " ", "")
-
-    fp = open(path, "w")
-    fp.write(data)
-    fp.close()
-
-    # fix _sysconfigdata
-    #
-    # TODO: make this more robust!  test_sysconfig_module of
-    # distutils.tests.test_sysconfig.SysconfigTestCase tests that
-    # the output from get_config_var in both sysconfig and
-    # distutils.sysconfig is exactly the same for both CFLAGS and
-    # LDFLAGS.  The fixing up is now complicated by the pretty
-    # printing in _sysconfigdata.py.  Also, we are using the
-    # pprint from the Python running the installer build which
-    # may not cosmetically format the same as the pprint in the Python
-    # being built (and which is used to originally generate
-    # _sysconfigdata.py).
-
-    import pprint
-
-    if getVersionMajorMinor() >= (3, 6):
-        # XXX this is extra-fragile
-        path = os.path.join(
-            path_to_lib, "_sysconfigdata_%s_darwin_darwin.py" % (ABIFLAGS,)
-        )
-    else:
-        path = os.path.join(path_to_lib, "_sysconfigdata.py")
-    fp = open(path, "r")
-    data = fp.read()
-    fp.close()
-    # create build_time_vars dict
-    g_dict = {}
-    l_dict = {}
-    exec(data, g_dict, l_dict)
-    build_time_vars = l_dict["build_time_vars"]
-    vars = {}
-    for k, v in build_time_vars.items():
-        if isinstance(v, str):
-            for p in (include_path, lib_path):
-                v = v.replace(" " + p, "")
-                v = v.replace(p + " ", "")
-        vars[k] = v
-
-    fp = open(path, "w")
-    # duplicated from sysconfig._generate_posix_vars()
-    fp.write("# system configuration generated and used by" " the sysconfig module\n")
-    fp.write("build_time_vars = ")
-    pprint.pprint(vars, stream=fp)
-    fp.close()
-
     # For non-main framework variants, remove any file names in its bin
     #   directory that duplicate ones in the main framework's.
     #   TODO: But do not delete the canonical executable name,
@@ -1336,7 +1247,14 @@ def buildPythonFramework(python_framework_name, buildDir, configure_options):
         our_framework_bin = os.path.join(frmDir, "Versions", getVersion(), "bin")
 
         renames = [
+            (f"idle{getVersion()}", f"idle{getVersion()}t"),
+            (f"pydoc{getVersion()}", f"pydoc{getVersion()}t"),
             (f"python{getVersion()}-intel64", f"python{getVersion()}t-intel64"),
+            (f"idle3", f"idle3t"),
+            (f"pydoc3", f"pydoc3t"),
+            (f"python3", f"python3t"),
+            (f"python3.13t-config", f"python3t-config"),
+            (f"python3-intel64", f"python3t-intel64"),
         ]
         for bin_name in os.listdir(our_framework_bin):
             for bn, new_bin_name in renames:
@@ -1395,7 +1313,8 @@ def createUsrLocalBinLinks():
     for fn in os.listdir(main_framework_bin):
         os.symlink(os.path.join(to_framework, fn), os.path.join(usr_local_bin, fn))
 
-    # TODO: for now, also create links for python3.xt and python3.xt-config
+    # TODO: for now, also create links for python3.xt, python3.xt-config,
+    #       python3.xt-intel64, python3t, python3t-config, and python3t-intel64
     #       in case the user also elects to install the free-threading variant
     to_framework = os.path.join(
         "..",
@@ -1408,7 +1327,14 @@ def createUsrLocalBinLinks():
         getVersion(),
         "bin",
     )
-    file_names = [f"python{getVersion()}t", f"python{getVersion()}t-config"]
+    file_names = [
+        f"python{getVersion()}t",
+        f"python{getVersion()}t-config",
+        f"python{getVersion()}t-intel64",
+        "python3t",
+        "python3t-config",
+        "python3t-intel64",
+    ]
     for fn in file_names:
         os.symlink(os.path.join(to_framework, fn), os.path.join(usr_local_bin, fn))
 
