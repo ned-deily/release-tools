@@ -3,19 +3,20 @@
 # Recompile the .py files.
 #
 
-PYVER="@PYVER@"t
-FWK="/Library/Frameworks/PythonT.framework/Versions/@PYVER@"
-PYTHON="${FWK}/bin/python@PYVER@"t
+PYVER="@PYVER@"
+PYVERT="${PYVER}t"
+FWK="/Library/Frameworks/PythonT.framework/Versions/${PYVER}"
+PYTHON="${FWK}/bin/python${PYVERT}"
 
 ${PYTHON} -E -s -Wi \
-    "${FWK}/lib/python${PYVER}/compileall.py" -q -j0 \
+    "${FWK}/lib/python${PYVERT}/compileall.py" -q -j0 \
     -f -x 'bad_coding|badsyntax|site-packages' \
-    "${FWK}/lib/python${PYVER}"
+    "${FWK}/lib/python${PYVERT}"
 
 ${PYTHON} -E -s -Wi -O \
-    "${FWK}/lib/python${PYVER}/compileall.py" -q -j0 \
+    "${FWK}/lib/python${PYVERT}/compileall.py" -q -j0 \
     -f -x 'bad_coding|badsyntax|site-packages' \
-    "${FWK}/lib/python${PYVER}"
+    "${FWK}/lib/python${PYVERT}"
 
 umask 022
 
@@ -25,24 +26,24 @@ umask 022
 rm -f "${FWK}/bin/pip3"
 rm -f "${FWK}/bin/pip${PYVER}"
 rm -f "${FWK}/bin/pip3t"
-rm -f "${FWK}/bin/pip${PYVER}t"
+rm -f "${FWK}/bin/pip${PYVERT}"
 ${PYTHON} -E -s -m ensurepip --upgrade || true
 [ ! -e "${FWK}/bin/pip3t" ] && mv "${FWK}/bin/pip3" "${FWK}/bin/pip3t" || true
-[ ! -e "${FWK}/bin/pip${PYVER}t" ] && mv "${FWK}/bin/pip${PYVER}" "${FWK}/bin/pip${PYVER}t" || true
+[ ! -e "${FWK}/bin/pip${PYVERT}" ] && mv "${FWK}/bin/pip${PYVER}" "${FWK}/bin/pip${PYVERT}" || true
 # Make sure there are no spurious pips left.
 rm -f "${FWK}/bin/pip"
 rm -f "${FWK}/bin/pip3"
 rm -f "${FWK}/bin/pip${PYVER}"
 
 ${PYTHON} -E -s -Wi \
-    "${FWK}/lib/python${PYVER}/compileall.py" -q -j0 \
+    "${FWK}/lib/python${PYVERT}/compileall.py" -q -j0 \
     -f -x badsyntax \
-    "${FWK}/lib/python${PYVER}/site-packages"
+    "${FWK}/lib/python${PYVERT}/site-packages"
 
 ${PYTHON} -E -s -Wi -O \
-    "${FWK}/lib/python${PYVER}/compileall.py" -q -j0 \
+    "${FWK}/lib/python${PYVERT}/compileall.py" -q -j0 \
     -f -x badsyntax \
-    "${FWK}/lib/python${PYVER}/site-packages"
+    "${FWK}/lib/python${PYVERT}/site-packages"
 
 chgrp -R admin "${FWK}"
 chmod -R g+w "${FWK}"
