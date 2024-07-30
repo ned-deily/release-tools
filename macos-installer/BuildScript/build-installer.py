@@ -1253,7 +1253,7 @@ def buildPythonFramework(python_framework_name, buildDir, configure_options):
             (f"idle3", f"idle3t"),
             (f"pydoc3", f"pydoc3t"),
             (f"python3", f"python3t"),
-            (f"python3.13t-config", f"python3t-config"),
+            (f"python3-config", f"python3t-config"),
             (f"python3-intel64", f"python3t-intel64"),
         ]
         for bin_name in os.listdir(our_framework_bin):
