@@ -102,6 +102,7 @@ ${PYTHON} -m test -w -uall,-largefile --timeout=60 test_idle
 ${PYTHON} -m test -w -uall,-largefile --timeout=60 test_tkinter
 ${PYTHON} -m test -w -uall,-largefile --timeout=60 test_ttk
 ${PYTHON} -m test -w -uall,-largefile --timeout=60 test_curses
+${PYTHON} -m test -w -uall,-largefile --timeout=60 test_repl
 
 ${PYTHON} -m pip install --force-reinstall --no-binary ":all:" --user psutil
 ${PYTHON} -c "import psutil; from pprint import pprint; pprint(list(psutil.process_iter()))"
