@@ -3,7 +3,7 @@
 # Recompile the .py files.
 #
 
-PYVER="@PYVER@"
+PYVER="@PYVER@"t
 FWK="/Library/Frameworks/PythonT.framework/Versions/@PYVER@"
 PYTHON="${FWK}/bin/python@PYVER@"t
 
@@ -16,6 +16,23 @@ ${PYTHON} -E -s -Wi -O \
     "${FWK}/lib/python${PYVER}/compileall.py" -q -j0 \
     -f -x 'bad_coding|badsyntax|site-packages' \
     "${FWK}/lib/python${PYVER}"
+
+umask 022
+
+# For now, unconditionally install pip for the free-threading build.
+# If pip does not do it, install pip3 and pip3.x as pip3t and pip3.xt.
+
+rm -f "${FWK}/bin/pip3"
+rm -f "${FWK}/bin/pip${PYVER}"
+rm -f "${FWK}/bin/pip3t"
+rm -f "${FWK}/bin/pip${PYVER}t"
+${PYTHON} -E -s -m ensurepip --upgrade || true
+[ ! -e "${FWK}/bin/pip3t" ] && mv "${FWK}/bin/pip3" "${FWK}/bin/pip3t" || true
+[ ! -e "${FWK}/bin/pip${PYVER}t" ] && mv "${FWK}/bin/pip${PYVER}" "${FWK}/bin/pip${PYVER}t" || true
+# Make sure there are no spurious pips left.
+rm -f "${FWK}/bin/pip"
+rm -f "${FWK}/bin/pip3"
+rm -f "${FWK}/bin/pip${PYVER}"
 
 ${PYTHON} -E -s -Wi \
     "${FWK}/lib/python${PYVER}/compileall.py" -q -j0 \
