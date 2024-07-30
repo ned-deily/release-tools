@@ -1250,17 +1250,29 @@ def buildPythonFramework(python_framework_name, buildDir, configure_options):
             (f"idle{getVersion()}", f"idle{getVersion()}t"),
             (f"pydoc{getVersion()}", f"pydoc{getVersion()}t"),
             (f"python{getVersion()}-intel64", f"python{getVersion()}t-intel64"),
-            (f"idle3", f"idle3t"),
-            (f"pydoc3", f"pydoc3t"),
-            (f"python3", f"python3t"),
-            (f"python3-config", f"python3t-config"),
-            (f"python3-intel64", f"python3t-intel64"),
         ]
         for bin_name in os.listdir(our_framework_bin):
             for bn, new_bin_name in renames:
                 if bin_name == bn:
                     print(f"-- renaming bin file: {bin_name} to {new_bin_name}")
                     os.rename(
+                        os.path.join(our_framework_bin, bin_name),
+                        os.path.join(our_framework_bin, new_bin_name),
+                    )
+                    break
+
+        symlinks = [
+            (f"idle{getVersion()}t", f"idle3t"),
+            (f"pydoc{getVersion()}t", f"pydoc3t"),
+            (f"python{getVersion()}t", f"python3t"),
+            (f"python{getVersion()}t-config", f"python3t-config"),
+            (f"python{getVersion()}t-intel64", f"python3t-intel64"),
+        ]
+        for bin_name in os.listdir(our_framework_bin):
+            for bn, new_bin_name in symlinks:
+                if bin_name == bn:
+                    print(f"-- linking bin file: {bin_name} to {new_bin_name}")
+                    os.symlink(
                         os.path.join(our_framework_bin, bin_name),
                         os.path.join(our_framework_bin, new_bin_name),
                     )
@@ -1274,6 +1286,23 @@ def buildPythonFramework(python_framework_name, buildDir, configure_options):
             else:
                 print(f"-- removing duplicate bin file: {bin_name}")
                 os.unlink(os.path.join(our_framework_bin, bin_name))
+
+    print("Fix file modes")
+    gid = grp.getgrnam("admin").gr_gid
+
+    for dirpath, dirnames, filenames in os.walk(frmDir):
+        for dn in dirnames:
+            os.chmod(os.path.join(dirpath, dn), STAT_0o775, follow_symlinks=False)
+            os.chown(os.path.join(dirpath, dn), -1, gid, follow_symlinks=False)
+
+        for fn in filenames:
+            if os.path.islink(fn):
+                continue
+            # "chmod g+w $fn"
+            p = os.path.join(dirpath, fn)
+            st = os.stat(p, follow_symlinks=False)
+            os.chmod(p, stat.S_IMODE(st.st_mode) | stat.S_IWGRP, follow_symlinks=False)
+            os.chown(p, -1, gid, follow_symlinks=False)
 
     os.chdir(curdir)
 
