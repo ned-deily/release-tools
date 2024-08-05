@@ -1107,7 +1107,7 @@ def buildPythonFramework(python_framework_name, buildDir, configure_options):
         f"--with-universal-archs={UNIVERSALARCHS} "
         f"{configure_options} "
         f"--enable-optimizations "
-        f"--with-lto "
+        f"--with-computed-gotos "
         f"--without-ensurepip "
         f"--with-system-libmpdec "
         f"--with-openssl='{workDirUsrLocal}' "
@@ -1121,6 +1121,11 @@ def buildPythonFramework(python_framework_name, buildDir, configure_options):
         f"TCLTK_LIBS='-L{workDirUsrLocalLib} -ltcl -ltk' "
         f"2>&1"
     )
+    # TODO: gh-122580: measurable performance degradataion using --with-lto
+    #       optimization in some cases, on Apple Silicon Macs for 3.13.0rc1.
+    #       Do not use --with-lto until we know why.
+    # f"--with-lto "
+
     # TODO: determine why our private ncurses builds cannot find
     #       terminfo data and why _curses and _curses_panel had been
     #       linking with the system ncurses (since 3.12.0 and
