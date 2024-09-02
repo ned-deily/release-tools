@@ -86,8 +86,21 @@ cd ./BuildScript/
 
 date
 
-echo export SDKROOT="${BP_MACOS_SDK_ROOT}"
-export SDKROOT="${BP_MACOS_SDK_ROOT}"
+if [ "x${BP_MACOS_DEVELOPER_DIR}" = "x" ]; then
+    echo " -- using default DEVELOPER_DIR"
+    unset DEVELOPER_DIR
+else
+    echo " -- using DEVELOPER_DIR=${BP_MACOS_DEVELOPER_DIR}"
+    export DEVELOPER_DIR="${BP_MACOS_DEVELOPER_DIR}"
+fi
+
+if [ "x${BP_MACOS_SDK_NAME}" = "x" ]; then
+    echo " -- using default SDK"
+    unset SDKROOT
+else
+    echo " -- using SDKROOT=${BP_MACOS_SDK_ROOT}"
+    export SDKROOT="${BP_MACOS_SDK_ROOT}"
+fi
 
 echo ${BP_PYTHON} build-installer.py \
    --universal-archs="${BP_UNIVERSAL_ARCHS}" \

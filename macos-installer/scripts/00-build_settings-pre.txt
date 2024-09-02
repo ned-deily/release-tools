@@ -26,7 +26,8 @@ BP_PY_VER="3.13"
 BP_UNIVERSAL_ARCHS="universal2"
 BP_DEPLOYMENT_TARGET="10.13"
 BP_MINIMUM_MACOS_VERSION="10.13.0"
-BP_MACOS_SDK_NAME="MacOSX13"
+BP_MACOS_DEVELOPER_DIR="/Applications/Xcode.app"    # "/Library/Developer/CommandLineTools/" "/Applications/Xcode-beta.app"
+BP_MACOS_SDK_NAME=""                                # "" = default, or "MacOSX14.4"
 BP_MACOS_SDK_ROOT="/Library/Developer/CommandLineTools/SDKs/${BP_MACOS_SDK_NAME}.sdk"
 
 # local build environment
