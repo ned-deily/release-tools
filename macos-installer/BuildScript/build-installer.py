@@ -210,14 +210,14 @@ def library_recipes():
         ]
     )
 
-    tcl_tk_ver = "8.6.14"
+    tcl_tk_ver = "8.6.15"
     base_url = "https://prdownloads.sourceforge.net/tcl/{what}{version}-src.tar.gz"
     result.extend(
         [
             dict(
                 name=f"Tcl {tcl_tk_ver}",
                 url=base_url.format(what="tcl", version=tcl_tk_ver),
-                checksum="5880225babf7954c58d4fb0f5cf6279104ce1cd6aa9b71e9a6322540e1c4de66",
+                checksum="861e159753f2e2fbd6ec1484103715b0be56be3357522b858d3cbb5f893ffef1",
                 configure=None,
                 useLDFlags=False,
                 install=f"make -C macosx install-embedded SUBFRAMEWORK=1 "
@@ -228,7 +228,7 @@ def library_recipes():
             dict(
                 name=f"Tk {tcl_tk_ver}",
                 url=base_url.format(what="tk", version=tcl_tk_ver),
-                checksum="8ffdb720f47a6ca6107eac2dd877e30b0ef7fac14f3a84ebbd0b3612cee41a94",
+                checksum="550969f35379f952b3020f3ab7b9dd5bfd11c1ef7c9b7c6a75f5c49aca793fec",
                 configure=None,
                 useLDFlags=False,
                 install=f"make -C macosx install-embedded SUBFRAMEWORK=1 "
