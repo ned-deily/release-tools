@@ -1,0 +1,55 @@
+# macOS installer build configuration
+# nad@python.org
+
+# Build-specific non-sensitive settings
+
+# These settings are available to all steps of the build process
+#   whether in the build or signing / packaging environments.
+#   It will be pushed upstream to the public GitHub repo.
+#   As such, this file should not contain any potentially
+#   sensitive data, such as keys.
+
+#   To start a build:
+#       1. create a new branch in this repo
+#               git switch -C MI_3.13.0a0
+#       2. copy this template file to 00-build_settings.txt,
+#       3. edit (replace @NONE@ entries), commit, and push to GitHub
+#       4. copy 00-private_build_settings-pre.tx to 00-private_build_settings.txt
+#       $. edit but do *not* commit or push upstream
+
+# build source
+
+BP_GITHUB_USER="Yhg1s"     # "ned-deily"  "Yhg1s"
+BP_CPYTHON_BUILD_REPO="https://github.com/${BP_GITHUB_USER}/cpython.git"
+BP_GITTAG="v3.13.0rc3"         # "v3.13.0b3"
+BP_PY_VER="3.13"
+
+# installer options
+
+BP_UNIVERSAL_ARCHS="universal2"
+BP_DEPLOYMENT_TARGET="10.13"
+BP_MINIMUM_MACOS_VERSION="10.13.0"
+BP_MACOS_DEVELOPER_DIR="/Applications/Xcode.app"    # "/Library/Developer/CommandLineTools/" "/Applications/Xcode-beta.app"
+BP_MACOS_SDK_NAME=""
+BP_MACOS_SDK_ROOT="/Library/Developer/CommandLineTools/SDKs/${BP_MACOS_SDK_NAME}.sdk"
+
+# local build environment
+
+BP_ROOT="$HOME/release-tools/macos-installer"
+BP_CPYTHON_LOCAL_CACHE_REPO="$HOME/Projects/PyDev/active/dev/3x/source"  # optional
+BP_THIRD_PARTY_SOURCES_CACHE="$HOME/Vault/Downloads/other-sources"
+BP_PYTHON="/usr/local/bin/python3.12"
+
+# global process settings
+
+umask 022
+
+# --- vestigial global variables ---
+
+BUILDNAME="${BP_GITTAG}"  # for now
+BUILD="${BUILDNAME}_variant" # for now
+BUILDTARBALL="cpython.tgz"
+BUILDEXPORTS="cpython.exports"
+BUILDVERSION="cpython.version"
+BUILDOTHER_SOURCES="other-sources"
+
