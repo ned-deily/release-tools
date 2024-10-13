@@ -503,7 +503,6 @@ def checkEnvironment():
         "CPATH",
         "C_INCLUDE_",
         "DYLD_",
-        "LANG",
         "LC_",
         "LD_",
         "LIBRARY_",
@@ -1659,7 +1658,6 @@ def main():
     os.environ["MACOSX_DEPLOYMENT_TARGET"] = DEPTARGET
     os.environ["CC"] = CC
     os.environ["CXX"] = CXX
-    os.environ["LC_ALL"] = "C"
 
     THIRD_PARTY_LIBRARIES_CACHE = os.path.join(DEPSRC, "libraries-saved")
 
