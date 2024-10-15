@@ -82,7 +82,7 @@ EOFY
 chmod 755 ./test.command
 
 # TODO: fix this
-PYTHON="/Library/Frameworks/PythonT.framework/Versions/3.13/bin/python3.13t"
+PYTHON="/Library/Frameworks/PythonT.framework/Versions/3.14/bin/python3.14t"
 
 cat >./test_t.command <<EOFZ
 #!/bin/sh
