@@ -1547,7 +1547,7 @@ def buildInstaller():
 
     writePlist(pl, os.path.join(pkgroot, "Resources", "Description.plist"))
     for fn in os.listdir("resources"):
-        if fn == ".svn":
+        if fn.startswith("."):
             continue
         if fn.endswith(".jpg"):
             shutil.copy(os.path.join("resources", fn), os.path.join(rsrcDir, fn))

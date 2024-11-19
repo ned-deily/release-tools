@@ -35,7 +35,7 @@ for f ; do
             chmod 664 "./${f}" && \
             chgrp downloads "./${f}" && \
             cp -pr "./${f}" "${BP_DOWNLOAD_SERVER_DEVTEST}/"
-        EOF2
+EOF2
         curl -X PURGE "${BP_DOWNLOAD_SERVER_DEVTEST_URL}/${f}"
     fi
 done
