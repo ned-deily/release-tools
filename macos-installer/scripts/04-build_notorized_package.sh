@@ -36,16 +36,26 @@ xcrun notarytool submit ./${INSTALL_PKG} \
 echo " -- stapling package"
 xcrun stapler staple ./${INSTALL_PKG}
 
-echo " -- signing package with pgp key"
-gpg --armor --detach-sign -u "${BP_GPG_USER}" "./${INSTALL_PKG}" || \
-    echo " -- Warning: gpg signing failed"
+case "${BP_MAKE_GPG_ASCS}" in
+    (y*|Y*)
+        echo " -- signing package with pgp key"
+        gpg --armor --detach-sign -u "${BP_GPG_USER}" "./${INSTALL_PKG}" || \
+            echo " -- Warning: gpg signing failed"
+        ;;
+    (*)
+        echo " -- skipping pgp key signing"
+        rm -f "${INSTALL_PKG}.asc"
+        ;;
+esac
 
 set -- "${INSTALL_PKG}" "${INSTALL_PKG}.asc"
 for f ; do
-    printf '%s %9s %s\n' \
-        $(openssl sha256 ./$f) \
-        "$f" \
-      >> ./email.txt
+    if [ -e "${f}" ] ; then     
+        printf '%s %9s %s\n' \
+            $(openssl sha256 ./$f) \
+            "$f" \
+          >> ./email.txt
+    fi
 done
 
 echo "${INSTALL_PKG}" > ./installer_pkg_name.txt

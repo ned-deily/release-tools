@@ -27,15 +27,17 @@ ssh ${BP_DOWNLOAD_SERVER} <<EOF1
     exit 0
 EOF1
 
-scp -pr "./${INSTALL_PKG}" "./${INSTALL_PKG}.asc" ${BP_DOWNLOAD_SERVER}:
-
-ssh ${BP_DOWNLOAD_SERVER} <<EOF2
-    chmod 664 "./${INSTALL_PKG}" "./${INSTALL_PKG}.asc" && \
-    chgrp downloads "./${INSTALL_PKG}" "./${INSTALL_PKG}.asc" && \
-    cp -pr "./${INSTALL_PKG}" "./${INSTALL_PKG}.asc" "${BP_DOWNLOAD_SERVER_DEVTEST}/"
-EOF2
-
-curl -X PURGE "${BP_DOWNLOAD_SERVER_DEVTEST_URL}/${INSTALL_PKG}"
-curl -X PURGE "${BP_DOWNLOAD_SERVER_DEVTEST_URL}/${INSTALL_PKG}.asc"
+set -- "${INSTALL_PKG}" "${INSTALL_PKG}.asc"
+for f ; do
+    if [ -e "${f}" ] ; then     
+        scp -pr "./${f}" ${BP_DOWNLOAD_SERVER}:
+        ssh ${BP_DOWNLOAD_SERVER} <<EOF2
+            chmod 664 "./${f}" && \
+            chgrp downloads "./${f}" && \
+            cp -pr "./${f}" "${BP_DOWNLOAD_SERVER_DEVTEST}/"
+        EOF2
+        curl -X PURGE "${BP_DOWNLOAD_SERVER_DEVTEST_URL}/${f}"
+    fi
+done
 
 exit 0

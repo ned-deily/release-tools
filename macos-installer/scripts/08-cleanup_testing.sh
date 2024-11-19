@@ -21,7 +21,7 @@ ssh ${BP_DOWNLOAD_SERVER} <<EOF1
         "${BP_DOWNLOAD_SERVER_DEVTEST}/${INSTALL_PKG}.asc"
     for f
     do
-        rm -r \$f
+        rm -rf \$f
     done
     exit 0
 EOF1
