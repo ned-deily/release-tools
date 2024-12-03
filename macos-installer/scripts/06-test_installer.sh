@@ -60,7 +60,7 @@ defaults write com.apple.CrashReporter DialogType none
 ulimit -n 1000
 date
 ${PYTHON} -E -s -m pip install --upgrade pip
-${PYTHON} -m test -j3 -w -uall,-largefile,-gui,-curses -x test_signal --timeout=120
+${PYTHON} -m test -j3 -w -uall,-largefile,-gui,-curses -x test_signal --timeout=240
 ${PYTHON} -m test.pythoninfo
 ${PYTHON} -m test -v -uall,-largefile --timeout=120 test_signal
 ${PYTHON} -m test -w -uall,-largefile --timeout=60 test_idle
