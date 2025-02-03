@@ -112,7 +112,7 @@ ${PYTHON} -c "import urllib.request;print(urllib.request.urlopen('https://www.py
 
 # [ x"$( arch )" = x"arm64" ] && [ -e "${PYTHON}-intel64" ] && ${PYTHON}-intel64 -m test -w -uall,-largefile || true
 # [ -e "${PYTHON}-32" ] && ${PYTHON}-32 -m test -w -uall,-largefile || true
-defaults write com.apple.CrashReporter DialogType creashreport
+defaults write com.apple.CrashReporter DialogType basic
 EOFZ
 
 chmod 755 ./test_t.command
