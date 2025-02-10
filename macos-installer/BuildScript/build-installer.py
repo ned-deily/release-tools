@@ -1416,18 +1416,6 @@ def packageFromRecipe(targetDir, recipe):
 
         if srcdir is not None:
             os.chdir(srcdir)
-            runCommand(
-                "pax -wf %s . 2>&1"
-                % (shellQuote(os.path.join(packageContents, "Archive.pax")),)
-            )
-            runCommand(
-                "gzip -9 %s 2>&1"
-                % (shellQuote(os.path.join(packageContents, "Archive.pax")),)
-            )
-            runCommand(
-                "mkbom . %s 2>&1"
-                % (shellQuote(os.path.join(packageContents, "Archive.bom")),)
-            )
 
         fn = os.path.join(packageContents, "PkgInfo")
         fp = open(fn, "w")
