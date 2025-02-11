@@ -166,10 +166,10 @@ codesign --sign "${BP_CERTIFICATE_DEVELOPER_ID_APPLICATION}" --keychain ${BP_KEY
 lib/python${PY_VER}/lib-dynload/*.so \
 lib/python${PY_VER}/config-${PY_VER}-darwin/python.o \
 lib/libcrypto.3.dylib \
-lib/libformw.5.dylib \
-lib/libmenuw.5.dylib \
-lib/libncursesw.5.dylib \
-lib/libpanelw.5.dylib \
+lib/libform.6.dylib \
+lib/libmenu.6.dylib \
+lib/libncurses.6.dylib \
+lib/libpanel.6.dylib \
 lib/libssl.3.dylib \
 Frameworks/Tcl.framework/Tcl \
 Frameworks/Tk.framework/Tk \

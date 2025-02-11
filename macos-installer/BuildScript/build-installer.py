@@ -255,43 +255,34 @@ def library_recipes():
     result.extend(
         [
             dict(
-                name="NCurses 5.9",
-                url="http://ftp.gnu.org/pub/gnu/ncurses/ncurses-5.9.tar.gz",
-                checksum="9046298fb440324c9d4135ecea7879ffed8546dd1b58e59430ea07a4633f563b",
+                name="NCurses 6.5",
+                url="https://ftp.gnu.org/gnu/ncurses/ncurses-6.5.tar.gz",
+                checksum="136d91bc269a9a5785e5f9e980bc76ab57428f604ce3e5a5a90cebc767971cc6",
                 configure_pre=[
-                    "--enable-pc-files",
+                    "--datadir=/usr/share",
+                    "--disable-lib-suffixes",
+                    "--disable-db-install",
+                    "--disable-mixed-case",
+                    "--enable-overwrite",
                     "--enable-widec",
+                    f"--libdir=/Library/Frameworks/Python.framework/Versions/{getVersion()}/lib",
+                    "--sharedstatedir=/usr/com",
+                    "--sysconfdir=/etc",
+                    "--with-default-terminfo-dir=/usr/share/terminfo",
+                    "--with-shared",
+                    "--with-terminfo-dirs=/usr/share/terminfo",
+                    "--without-ada",
                     "--without-cxx",
                     "--without-cxx-binding",
-                    "--without-ada",
-                    "--without-curses-h",
-                    "--enable-shared",
-                    "--with-shared",
+                    "--without-cxx-shared",
                     "--without-debug",
-                    "--without-normal",
-                    "--without-tests",
                     "--without-manpages",
-                    "--datadir=/usr/share",
-                    "--sysconfdir=/etc",
-                    "--sharedstatedir=/usr/com",
-                    "--with-terminfo-dirs=/usr/share/terminfo",
-                    "--with-default-terminfo-dir=/usr/share/terminfo",
-                    "--libdir=/Library/Frameworks/Python.framework/Versions/%s/lib"
-                    % (getVersion(),),
-                ],
-                patchscripts=[
-                    (
-                        "ftp://ftp.invisible-island.net/ncurses//5.9/ncurses-5.9-20120616-patch.sh.bz2",
-                        "f54bf02a349f96a7c4f0d00922f3a0d4",
-                    ),
+                    "--without-normal",
+                    "--without-progs",
+                    "--without-tests",
                 ],
                 useLDFlags=False,
-                install="make && make install DESTDIR=%s && cd %s/usr/local/lib && ln -fs ../../../Library/Frameworks/Python.framework/Versions/%s/lib/lib* ."
-                % (
-                    shellQuote(os.path.join(WORKDIR, "libraries")),
-                    shellQuote(os.path.join(WORKDIR, "libraries")),
-                    getVersion(),
-                ),
+                install=f"make && make install DESTDIR={shellQuote(os.path.join(WORKDIR, "libraries"))} && cd {shellQuote(os.path.join(WORKDIR, "libraries"))}/usr/local/lib && ln -fs ../../../Library/Frameworks/Python.framework/Versions/{getVersion()}/lib/lib* .",
             ),
             dict(
                 name="SQLite 3.45.3",
@@ -1111,6 +1102,10 @@ def buildPythonFramework(python_framework_name, buildDir, configure_options):
         f"--without-ensurepip "
         f"--with-system-libmpdec "
         f"--with-openssl='{workDirUsrLocal}' "
+        f"CURSES_CFLAGS='-I{workDirUsrLocalInclude}' "
+        f"CURSES_LIBS='-L{workDirUsrLocalLib} -lncurses' "
+        f"PANEL_CFLAGS='-I{workDirUsrLocalInclude}' "
+        f"PANEL_LIBS='-L{workDirUsrLocalLib} -lpanel' "
         f"LIBLZMA_CFLAGS='-I{workDirUsrLocalInclude}' "
         f"LIBLZMA_LIBS='-L{workDirUsrLocalLib} -llzma' "
         f"LIBMPDEC_CFLAGS='-I{workDirUsrLocalInclude}' "
@@ -1121,15 +1116,6 @@ def buildPythonFramework(python_framework_name, buildDir, configure_options):
         f"TCLTK_LIBS='-L{workDirUsrLocalLib} -ltcl -ltk' "
         f"2>&1"
     )
-    # TODO: determine why our private ncurses builds cannot find
-    #       terminfo data and why _curses and _curses_panel had been
-    #       linking with the system ncurses (since 3.12.0 and
-    #       until gh-113565 in 3.13.0b4). For now, continue to
-    #       use the system ncurses.
-    # f"CURSES_CFLAGS='-I{workDirUsrLocalInclude}/ncursesw' "
-    # f"CURSES_LIBS='-L{workDirUsrLocalLib} -lncursesw' "
-    # f"PANEL_CFLAGS='-I{workDirUsrLocalInclude}/ncursesw' "
-    # f"PANEL_LIBS='-L{workDirUsrLocalLib} -lpanelw' "
 
     runshared_for_make = f" RUNSHARED='{grepValue("Makefile", "RUNSHARED")} DYLD_LIBRARY_PATH={workDirUsrLocalLib}'"
 
