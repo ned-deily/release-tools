@@ -17,5 +17,6 @@ BP_GPG_USER="@NONE@"
 # download server options
 
 BP_DOWNLOAD_SERVER="@NONE@"   # ssh host name, may be configured in ~/.ssh/config
+BP_DOWNLOAD_SERVER_PYTHON="@NONE@"
 BP_DOWNLOAD_SERVER_DEVTEST="@NONE@"
 BP_DOWNLOAD_SERVER_DEVTEST_URL="@NONE@"

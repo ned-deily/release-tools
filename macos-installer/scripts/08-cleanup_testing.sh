@@ -15,9 +15,8 @@ cd ./notarized-package
 INSTALL_PKG="$( cat installer_pkg_name.txt )"
 
 ssh ${BP_DOWNLOAD_SERVER} <<EOF1
-    set --  "./${INSTALL_PKG}" \
-        "./${INSTALL_PKG}.asc" \
-        "${BP_DOWNLOAD_SERVER_DEVTEST}/${INSTALL_PKG}" \
+    set -- \
+\        "${BP_DOWNLOAD_SERVER_DEVTEST}/${INSTALL_PKG}" \
         "${BP_DOWNLOAD_SERVER_DEVTEST}/${INSTALL_PKG}.asc"
     for f
     do

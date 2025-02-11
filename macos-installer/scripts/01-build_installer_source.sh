@@ -61,7 +61,13 @@ export PYVERSION='${_PYVERSION}'
 export PYMAJMIN='${_PYMAJMIN}'
 EOFPYV
 
-cp -pr ${BP_THIRD_PARTY_SOURCES_CACHE} ${BUILDOTHER_SOURCES}
+if [ ! x"${BP_THIRD_PARTY_SOURCES_CACHE}" = x ] && [ -e "${BP_THIRD_PARTY_SOURCES_CACHE}" ] ; then
+    echo " -- Using third-party sources cache "
+    echo " "
+    cp -pr ${BP_THIRD_PARTY_SOURCES_CACHE} ${BUILDOTHER_SOURCES}
+else
+    mkdir ./${BUILDOTHER_SOURCES}
+fi
 
 if [ -e "../cached-artifacts/libraries-saved" ] ; then
     echo " -- Using cached libraries-saved "

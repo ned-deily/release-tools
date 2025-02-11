@@ -8,24 +8,25 @@
 
 #   To start a build:
 #       1. create a new branch in this repo
-#               git switch -C MI_3.13.0a0
+#               git switch -C MI_3.14.0a5
 #       2. copy this template file to 00-build_settings.txt,
 #       3. edit (replace @NONE@ entries), commit, and push to GitHub
-#       4. copy 00-private_build_settings-pre.tx to 00-private_build_settings.txt
+#       4. copy 00-private_build_settings-pre.txt to 00-private_build_settings.txt
 #       $. edit but do *not* commit or push upstream
 
 # build source
 
-BP_GITHUB_USER="@NONE@"
+BP_GITHUB_USER="@NONE@"     # "python" "hugovk"  "Yhg1s"
 BP_CPYTHON_BUILD_REPO="https://github.com/${BP_GITHUB_USER}/cpython.git"
-BP_GITTAG="@NONE@"      # for example "v3.13.0rc1"
-BP_PY_VER="3.13"
+BP_GITTAG="@NONE@"          # for example "v3.14.0a5"
+BP_PY_VER="3.14"
+BP_MAKE_GPG_ASCS="no"       # no (3.14+) or yes (pre-3.14)
 
 # installer options
 
 BP_UNIVERSAL_ARCHS="universal2"
-BP_DEPLOYMENT_TARGET="10.13"
-BP_MINIMUM_MACOS_VERSION="10.13.0"
+BP_DEPLOYMENT_TARGET="10.15"
+BP_MINIMUM_MACOS_VERSION="10.15.0"
 BP_MACOS_DEVELOPER_DIR="/Applications/Xcode.app"    # "/Library/Developer/CommandLineTools/" "/Applications/Xcode-beta.app"
 BP_MACOS_SDK_NAME=""                                # "" = default, or "MacOSX14.4"
 BP_MACOS_SDK_ROOT="/Library/Developer/CommandLineTools/SDKs/${BP_MACOS_SDK_NAME}.sdk"

@@ -49,6 +49,38 @@ EOF_DOWNLOAD
 
 chmod 755 ./download_devtest.command
 
+cat >./install_devtest.command <<EOF_INSTALL
+#!/bin/sh
+set -x
+
+# create installer choicechanges to customize the install:
+#    enable the PythonTFramework-3.14 package
+#    while accepting the other defaults (install all other packages)
+cat > /tmp/${INSTALL_PKG}_choicechanges.plist <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+        <dict>
+                <key>attributeSetting</key>
+                <integer>1</integer>
+                <key>choiceAttribute</key>
+                <string>selected</string>
+                <key>choiceIdentifier</key>
+                <string>org.python.Python.PythonTFramework-3.14</string>
+        </dict>
+</array>
+</plist>
+EOF
+
+sudo installer -pkg ~/Downloads/${INSTALL_PKG} -applyChoiceChangesXML /tmp/${INSTALL_PKG}_choicechanges.plist -target /
+rm -f /tmp/${INSTALL_PKG}_choicechanges.plist
+
+exit 0
+EOF_INSTALL
+
+chmod 755 ./install_devtest.command
+
 cat >./test.command <<EOFY
 #!/bin/sh
 set -x
@@ -119,6 +151,7 @@ chmod 755 ./test_t.command
 
 scp -p \
         ./download_devtest.command \
+        ./install_devtest.command \
         ./test.command \
         ./test_t.command \
     ${HOST}:Desktop/ || echo "--ERROR: scp to test host failed - files here $PWD"
