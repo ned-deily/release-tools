@@ -33,9 +33,9 @@ BP_MACOS_SDK_ROOT="/Library/Developer/CommandLineTools/SDKs/${BP_MACOS_SDK_NAME}
 
 # local build environment
 
-BP_ROOT="@NONE@"
-BP_CPYTHON_LOCAL_CACHE_REPO="@NONE@"  # optional
-BP_THIRD_PARTY_SOURCES_CACHE="@NONE@"
+BP_ROOT="@NONE@"        # source directory for the build_macos_installer repo
+BP_CPYTHON_LOCAL_CACHE_REPO="@NONE@"    # optional
+BP_THIRD_PARTY_SOURCES_CACHE="@NONE@"   # optional
 BP_PYTHON="python3"
 
 # global process settings
